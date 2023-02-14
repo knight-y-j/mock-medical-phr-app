@@ -2,10 +2,11 @@
 pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
-import {MockMedical, HEALTH_RECORD, BLOOD_TYPE} from "src/mock/MockMedical.sol";
+import {Medical} from "src/contracts/Medical.sol";
+import {HEALTH_RECORD, BLOOD_TYPE} from "src/domain/Patient.sol";
 
-contract TestMockMedical is Test {
-    MockMedical md;
+contract TestMedical is Test {
+    Medical md;
 
     address hospitalManager;
     address hospitalDoctor;
@@ -28,7 +29,7 @@ contract TestMockMedical is Test {
         hospitalNurse = makeAddr("Rabbit");
         patient = makeAddr("Jabberwock");
 
-        md = new MockMedical();
+        md = new Medical();
 
         vm.prank(hospitalManager);
         md.createHospital();
