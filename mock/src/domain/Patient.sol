@@ -8,9 +8,10 @@ struct PATIENT {
 }
 
 struct HEALTH_RECORD {
-        string name;
-        uint8 age;
-        BLOOD_TYPE blood;
+    string name;
+    uint8 age;
+    BLOOD_TYPE blood;
+    uint256 updatedAt;
 }
 
 enum BLOOD_TYPE {

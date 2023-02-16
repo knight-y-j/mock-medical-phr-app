@@ -13,6 +13,7 @@
     "@openzeppelin/contracts-upgradeable": "^4.8.1",
     "@openzeppelin/hardhat-defender": "^1.8.2",
     "@openzeppelin/hardhat-upgrades": "^1.22.1",
+    "@pinata/sdk": "^2.1.0",
     "dotenv": "^16.0.3",
     "hardhat": "^2.12.7",
     "ipfs-http-client": "^60.0.0",
