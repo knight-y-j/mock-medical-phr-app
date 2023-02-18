@@ -3,31 +3,19 @@ import fs from 'fs';
 import dotENV from 'dotenv';
 dotENV.config();
 
-const name: string = 'MyToken';
+const name: string = 'MyVillage';
 
 const pinata = new PinataClient({
   pinataApiKey: process.env.PINATA_KEY,
   pinataSecretApiKey: process.env.PINATA_SECRET
 });
 
-// https://github.com/ultronDebugs/oneNftMintService/blob/e35935417392470e1631e99554e7576d74728c94/src/uploadMetadata.ts
-
-// npx ts-node scripts/fileStorage/uploadPinata.ts 
-// {
-//   IpfsHash: 'Qmb5ALi1RT1is8W6bTaXqGZwCQ4RrQmcvMFJHvVRtdQGMF',
-//   PinSize: 113123,
-//   Timestamp: '2023-02-16T08:13:47.625Z'
-// }
-
-const uploadFileToPinata = async () => { 
-  const readableStreamForFile = fs.createReadStream('./assets/sample.jpg');
+const uploadFileToPinata = async (): Promise<string> => { 
+  const readableStreamForFile = fs.createReadStream('./assets/yakan.jpg');
 
   const imgOptions: PinataPinOptions = {
     pinataMetadata: {
         name: `${name}__image`,
-        // keyvalues: {
-        //     customKey: 'customValue',
-        // }
     },
     pinataOptions: {
         cidVersion: 0
@@ -35,31 +23,42 @@ const uploadFileToPinata = async () => {
   };
 
   const result = await pinata.pinFileToIPFS(readableStreamForFile, imgOptions);
-  console.log(result);
+  console.log(`https://gateway.pinata.cloud/ipfs/${result.IpfsHash}`);
+
+  return result.IpfsHash;
 }
 
-const uploadMetadataToPinata = async () => { 
-  const readableStreamForFile = fs.createReadStream('./assets/sample.jpg');
-
+const uploadMetadataToPinata = async (link: string):Promise<void> => { 
   const imgOptions: PinataPinOptions = {
     pinataMetadata: {
         name: `${name}__json`,
-        // keyvalues: {
-        //     customKey: 'customValue',
-        // }
     },
     pinataOptions: {
         cidVersion: 0
     }
   };
 
-  const result = await pinata.pinFileToIPFS(readableStreamForFile, imgOptions);
-  console.log(result);
+  const metadata = {
+    name : "YAKAN",
+    symbol : "MyVillage",
+    description : "this is yakan",
+    image : `https://gateway.pinata.cloud/ipfs/${link}`,
+    attributes : [
+      {
+        trait_type : "YAKAN",
+        value : 1
+      }
+    ]
+  };
+
+  const result = await pinata.pinJSONToIPFS(metadata, imgOptions);
+  console.log(`https://gateway.pinata.cloud/ipfs/${result.IpfsHash}`);
 }
 
 (async () => {
   try {
-    await uploadFileToPinata();
+    const link = await uploadFileToPinata();
+    await uploadMetadataToPinata(link);
     process.exit(0);
   } catch (err) {
     console.log(err);
