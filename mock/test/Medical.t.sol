@@ -17,11 +17,13 @@ contract TestMedical is Test {
     address[] hospitalDoctors;
     address[] hospitalNurses;
 
-    HEALTH_RECORD record = HEALTH_RECORD({
-        name: "Jabberwock",
-        age: 1,
-        blood: BLOOD_TYPE.O
-    });
+    HEALTH_RECORD record =
+        HEALTH_RECORD({
+            name: "Jabberwock",
+            age: 1,
+            blood: BLOOD_TYPE.O,
+            updatedAt: block.timestamp
+        });
 
     function setUp() public {
         hospitalManager = makeAddr("Quees");
@@ -49,7 +51,7 @@ contract TestMedical is Test {
     /**
      * @dev Medical
      * - MockMedical contract
-    */
+     */
 
     function test_Success_MockMedical_transferFrom() public {
         HEALTH_RECORD memory gotRecord;
@@ -86,7 +88,7 @@ contract TestMedical is Test {
     /**
      * @dev Patient
      * - MockPatient contraact
-    */
+     */
 
     function test_Success_MockPatient_createHealthRecord() public {
         HEALTH_RECORD memory gotRecord;
@@ -117,7 +119,8 @@ contract TestMedical is Test {
         HEALTH_RECORD memory _record = HEALTH_RECORD({
             name: "Jabberwock",
             age: 2,
-            blood: BLOOD_TYPE.A
+            blood: BLOOD_TYPE.A,
+            updatedAt: block.timestamp
         });
 
         vm.prank(patient);
@@ -134,7 +137,8 @@ contract TestMedical is Test {
         HEALTH_RECORD memory _record = HEALTH_RECORD({
             name: "Jabberwock",
             age: 2,
-            blood: BLOOD_TYPE.A
+            blood: BLOOD_TYPE.A,
+            updatedAt: block.timestamp
         });
 
         vm.prank(dummyPatient);
@@ -145,13 +149,12 @@ contract TestMedical is Test {
     /**
      * @dev Hospital
      * - MockHospital contract
-    */
+     */
 
     function test_Success_MockHospital_createHospital() public {
         hospitalIDs = md.getHospitals();
 
-        for(uint256 i = 0; i < hospitalIDs.length;) {
-
+        for (uint256 i = 0; i < hospitalIDs.length; ) {
             assertEq(hospitalIDs[i], 1);
 
             unchecked {
@@ -175,8 +178,7 @@ contract TestMedical is Test {
         vm.prank(hospitalManager);
         hospitalDoctors = md.getDoctors(dummyID);
 
-        for(uint256 i = 0; i < hospitalDoctors.length;) {
-
+        for (uint256 i = 0; i < hospitalDoctors.length; ) {
             assertEq(hospitalDoctors[i], hospitalDoctor);
 
             unchecked {
@@ -203,8 +205,7 @@ contract TestMedical is Test {
         vm.prank(hospitalManager);
         hospitalNurses = md.getNurses(dummyID);
 
-        for(uint256 i = 0; i < hospitalNurses.length;) {
-
+        for (uint256 i = 0; i < hospitalNurses.length; ) {
             assertEq(hospitalNurses[i], hospitalNurse);
 
             unchecked {
