@@ -1,4 +1,4 @@
-# mock-handai-phr-app
+# mock-medical-phr-app
 
 -----
 
